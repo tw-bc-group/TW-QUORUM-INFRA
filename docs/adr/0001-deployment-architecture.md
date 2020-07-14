@@ -62,6 +62,7 @@ tasks:
 4. 给一个公网ip和域名到整个网络
 
 
+> 参考资料：https://github.com/jpmorganchase/qubernetes/tree/master/7nodes
 
 ## Consequences
 
