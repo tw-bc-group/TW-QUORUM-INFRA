@@ -1,2 +1,2 @@
 # TW-QUORUM-INFRA
-tf, k8s, quorum 
+helm, k8s, quorum 
