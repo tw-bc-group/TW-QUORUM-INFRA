@@ -6,11 +6,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: genesis-config
-  
+  name: {{ .Values.name }}-genesis-config
+
   labels:
     app: qubernetes
-    name: genesis-config
+    name: {{ .Values.name }}-genesis-config
 data:
   genesis-geth.json: |-
       
@@ -18,7 +18,7 @@ data:
       {
       "alloc": {
           "0xed9d02e382b34818e88b88a309c7fe71e65f419d": {
-             "balance": "1000000000000000000000000000"
+             "balance": "100000000000000000000000000000"
           }, 
           "0xca843569e3427144cead5e4d5999a3d0ccf92b8e": {
              "balance": "1000000000000000000000000000"
