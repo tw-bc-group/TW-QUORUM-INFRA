@@ -56,9 +56,6 @@ spec:
         - name: genesis-config-persistent-storage
           mountPath: /etc/quorum/genesis/genesis-geth.json
           subPath: genesis-geth.json
-        - name: contracts-config
-          mountPath: /etc/quorum/qdata/contracts-tmp
-          readOnly: false
       containers:
       - name: tessera
         image: quorumengineering/tessera:0.11
@@ -224,7 +221,7 @@ spec:
       volumes:
       - name: quorum-permissioned-config
         configMap:
-          name: quorum-permissioned-config
+          name: {{ .Values.name }}-quorum-permissioned-config
           items:
           - key: permissioned-nodes.json
             path: permissioned-nodes.json.tmpl
@@ -232,13 +229,13 @@ spec:
             path: permissioned-update.sh
       - name: genesis-config-persistent-storage
         configMap:
-          name: genesis-config
+          name: {{ .Values.name }}-genesis-config
           items:
           - key: genesis-geth.json
             path: genesis-geth.json
       - name: tessera-config
         configMap:
-          name: tessera-config
+          name: {{ .Values.name }}-tessera-config
           items:
           - key: tessera-config.json.tmpl
             path: tessera-config.json.tmpl
@@ -246,12 +243,9 @@ spec:
             path: tessera-config-enhanced.json.tmpl
           - key: tessera-config-9.0.json.tmpl
             path: tessera-config-9.0.json.tmpl
-      - name: contracts-config
-        configMap:
-          name: contracts-config
       - name: keystore-tm
         configMap:
-          name: quorum-node1-tm-key-config
+          name: quorum-{{- .Values.name -}}-tm-key-config
           items:
           - key: tm.pub
             path: tm.pub
@@ -259,32 +253,32 @@ spec:
             path: tm.key
       - name: quorum-key-config-persistent-storage
         configMap:
-          name: quorum-node1-account-key-config
+          name: quorum-{{- .Values.name -}}-account-key-config
           items:
           - key: key
             path: key
       - name: quorum-nodekey
         configMap:
-          name: quorum-node1-nodekey-config
+          name: quorum-{{- .Values.name -}}-nodekey-config
           items:
           - key: nodekey
             path: nodekey
       - name: quorum-enode
         configMap:
-          name: quorum-node1-enode-config
+          name: quorum-{{- .Values.name -}}-enode-config
           items:
             - key: enode
               path: enode
       - name: geth-helpers
         configMap:
-          name: geth-helpers
+          name: {{ .Values.name }}-geth-helpers
           items:
             - key: geth-attach.sh
               path: geth-attach.sh
             - key: geth-exec.sh
               path: geth-exec.sh
           defaultMode: 0777
-      
+
       # PVC (configurable) https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes
       - name: quorum-persistent-storage
         persistentVolumeClaim:
