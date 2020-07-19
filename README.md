@@ -35,3 +35,8 @@ helm install one ./ --set name=node1
 helm install two ./ --set name=node2  
 helm install three ./ --set name=node3 
 helm install four ./ --set name=node4  
+
+
+## 手动组网
+
+http://docs.goquorum.com/en/latest/Getting%20Started/Creating-A-Network-From-Scratch/#tessera

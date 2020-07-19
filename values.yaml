@@ -4,4 +4,4 @@
 
 name: node1
 nameOverride: node1
-bashDebug: true
+bashDebug: false

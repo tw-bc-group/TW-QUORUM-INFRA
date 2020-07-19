@@ -1,3 +1,5 @@
+
+---
 # kubectl create configmap game-config --from-file=configure-pod-container/dd1/key
 apiVersion: v1
 kind: ConfigMap
@@ -373,5 +375,6 @@ metadata:
         app: qubernetes
         name: {{ include "quorum.name" . }}-sh-files
 data:
-    tessera-sh: |-
-{{ tpl (.Files.Get "files/tessera.sh") . | indent 4 }}
+    tessera.sh: |+
+{{ tpl (.Files.Get "files/tessera.sh") . | indent 8 }}
+---
