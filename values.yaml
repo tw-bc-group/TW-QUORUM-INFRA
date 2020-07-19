@@ -3,3 +3,5 @@
 # Declare variables to be passed into your templates.
 
 name: node1
+nameOverride: node1
+bashDebug: true

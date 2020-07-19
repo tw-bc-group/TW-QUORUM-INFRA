@@ -9,7 +9,7 @@ metadata:
 
     labels:
         app: qubernetes
-        name: quorum-{{ .Values.name }}-tm-key-config
+        name: quorum-{{ include "quorum.name" . }}-tm-key-config
 
 data:
     tm.key: |-
