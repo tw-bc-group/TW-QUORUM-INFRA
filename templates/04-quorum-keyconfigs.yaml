@@ -1,64 +1,45 @@
-# kubectl create configmap game-config --from-file=configure-pod-container/dd1/key
-        # the key used for private transactions
-        # quorum transaction manager keys
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-    name: quorum-{{ .Values.name  }}-tm-key-config
 
-    labels:
-        app: qubernetes
-        name: quorum-{{ include "quorum.name" . }}-tm-key-config
-
-data:
-    tm.key: |-
-        {"data":{"bytes":"Wl+xSyXVuuqzpvznOS7dOobhcn4C5auxkFRi7yLtgtA="},"type":"unlocked"}
-    tm.pub: |-
-        BULeR8JyUWhiuuCMU/HLA0Q5pzkYT+cHII3ZKBey3Bo=
 
 ---
 
-# kubectl create configmap game-config --from-file=configure-pod-container/dd1/key
 # nodekey (enode) (geth/ethereum)
+# nodekey是node的唯一标识，需要配置在node数据文件路径中，以太坊nodekey生成的标准命令是使用bootnode --genkey=nodekey命令
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: quorum-{{ .Values.name  }}-nodekey-config
+    name: quorum-{{ include "quorum.name" . }}-nodekey-config
     labels:
         app: qubernetes
-        name: quorum-{{ .Values.name  }}-nodekey-config
+        name: quorum-{{ include "quorum.name" . }}-nodekey-config
 data:
-    nodekey: |
-        1be3b50b31734be48452c29d714941ba165ef0cbf3ccea8ca16c45e3d8d45fb0
+    nodekey: {{ .Values.nodekeyOverride  }}
 
 ---
-# kubectl create configmap game-config --from-file=configure-pod-container/dd1/key
+
 # nodekey (enode) (geth/ethereum)
+# https://ethereum.stackexchange.com/questions/28970/how-to-produce-enode-from-node-key
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: quorum-{{ .Values.name  }}-enode-config
+    name: quorum-{{ include "quorum.name" . }}-enode-config
 
     labels:
         app: qubernetes
-        name: quorum-{{ .Values.name  }}-enode-config
+        name: quorum-{{ include "quorum.name" . }}-enode-config
 
 data:
-    enode: |
-        ac6b1096ca56b9f6d004b779ae3728bf83f8e22453404cc3cef16a3d9b96608bc67c4b30db88e0a5a6c6390213f7acbe1153ff6d23ce57380104288ae19373ef
+    enode: {{ .Values.enodeOverride  }}
 
+---
 # ethereum / geth account keys (keystore)
----
-# kubectl create configmap game-config --from-file=configure-pod-container/dd1/key
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: quorum-{{ .Values.name  }}-account-key-config
+    name: quorum-{{ include "quorum.name" . }}-account-key-config
     labels:
         app: qubernetes
-        name: quorum-{{ .Values.name  }}-account-key-config
+        name: quorum-{{ include "quorum.name" . }}-account-key-config
 data:
-    key: |-
-        {"address":"ed9d02e382b34818e88b88a309c7fe71e65f419d","crypto":{"cipher":"aes-128-ctr","ciphertext":"4e77046ba3f699e744acb4a89c36a3ea1158a1bd90a076d36675f4c883864377","cipherparams":{"iv":"a8932af2a3c0225ee8e872bc0e462c11"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"8ca49552b3e92f79c51f2cd3d38dfc723412c212e702bd337a3724e8937aff0f"},"mac":"6d1354fef5aa0418389b1a5d1f5ee0050d7273292a1171c51fd02f9ecff55264"},"id":"a65d1ac3-db7e-445d-a1cc-b6c5eeaa05e0","version":3}
+    key: {{ .Values.keyOverride }} 
 # end node

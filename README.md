@@ -43,3 +43,5 @@ helm install four ./ --set name=node4
 2. [Quorum手动搭建指南](https://www.jianshu.com/p/b4ddb24b2720)
 3. [Quorum: permissioned-nodes.json and static-nodes.json](https://ethereum.stackexchange.com/questions/64267/quorum-permissioned-nodes-js-and-static-nodes-js)
 4. [Quorum HA Setup](http://docs.goquorum.com/en/latest/How-To-Guides/HA_Setup/)
+5. [Static node connections --nodiscover](https://docs.goquorum.com/en/latest/How-To-Guides/adding_nodes/)
+6. [Peer-to-peer discovery](https://docs.goquorum.com/en/latest/How-To-Guides/adding_nodes/)

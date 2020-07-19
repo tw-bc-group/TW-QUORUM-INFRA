@@ -18,19 +18,6 @@ spec:
     requests:
       storage: 200Mi
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-{{ include "quorum.name" . }}-tm-pvc
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
 
 ---
 apiVersion: v1

@@ -11,7 +11,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name  }}-quorum-deployment
+  name: {{ include "quorum.name" . }}-quorum-deployment
 
 spec:
   strategy:
@@ -19,14 +19,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: {{ .Values.name  }}-quorum-deployment
+      name: {{ include "quorum.name" . }}-quorum-deployment
   template:
     metadata:
-      name: {{ .Values.name  }}-quorum-deployment
+      name: {{ include "quorum.name" . }}-quorum-deployment
       labels:
         app: qubernetes
         tier: backend
-        name: {{ .Values.name  }}-quorum-deployment
+        name: {{ include "quorum.name" . }}-quorum-deployment
 
     spec:
       securityContext:
@@ -53,83 +53,26 @@ spec:
           mountPath: /etc/quorum/genesis/genesis-geth.json
           subPath: genesis-geth.json
       containers:
-      - name: tessera
-        image: quorumengineering/tessera:0.11
-        command: ["sh","-cx"]
-        args:
-        - |-
-          echo "exec tessera.sh ..."
-          . /etc/quorum/qdata/tm/tessera.sh
-          echo "exec tessera.sh... done."
-
-        ports:
-          - containerPort: 9001
-        env:
-          - name: QHOME
-            value: /etc/quorum/qdata
-          - name: QUORUM_HOME
-            value: /etc/quorum/qdata
-          - name: DDIR
-            value: /etc/quorum/qdata/tm
-        volumeMounts:
-        - name: quorum-logs-persistent-storage
-          mountPath: /etc/quorum/qdata/logs
-        - name: tm-persistent-storage
-          mountPath: /etc/quorum/qdata/tm
-        - name: quorum-persistent-storage
-          mountPath: /etc/quorum/qdata
-        - name: keystore-tm
-          mountPath: /etc/quorum/qdata/tm/tm.pub
-          subPath: tm.pub
-        - name: keystore-tm
-          mountPath: /etc/quorum/qdata/tm/tm.key
-          subPath: tm.key
-        - name: tessera-config
-          mountPath: /etc/quorum/qdata/tm/tessera-config.json.tmpl
-          subPath: tessera-config.json.tmpl
-        - name: tessera-config
-          mountPath: /etc/quorum/qdata/tm/tessera-config-enhanced.json.tmpl
-          subPath: tessera-config-enhanced.json.tmpl
-        - name: tessera-config
-          mountPath: /etc/quorum/qdata/tm/tessera-config-9.0.json.tmpl
-          subPath: tessera-config-9.0.json.tmpl
-        - name: sh-files
-          mountPath: /etc/quorum/qdata/tm/tessera.sh
-          subPath: tessera.sh
       - name: quorum
         image: quorumengineering/quorum:2.5.0
         command: [ "sh" ]
-        # TODO: have to generate sed files
-        #       PERM_NODE_JSON=$(echo $PERM_NODE_TMPL | sed \"s/%QUORUM-NODE01_SERVICE_HOST%/$QUORUM_NODE01_SERVICE_HOST/g\" | sed \"s/%QUORUM-NODE02_SERVICE_HOST%/$QUORUM_NODE02_SERVICE_HOST/g\");
-        # sleep to give constellation some time to start up and discover the other nodes.
-        #  --maxpeers 7
         args:
         - "-cx"
         - "
            apk add curl;
            apk add jq;
 
-           sh $QHOME/permission-nodes/permissioned-update.sh;
-           rm -r /etc/quorum/qdata/contracts-tmp;
-           echo what in this dir;
            ls  $QUORUM_DATA_DIR;
            cat /etc/quorum/genesis/genesis-geth.json;
 
            chmod 644 $QUORUM_DATA_DIR/keystore/key;
  
-           echo sleeping for 60 seconds to wait for the transaction manager to startup.
-           sleep 60;
-           echo transaction manager is up;
-
-
            touch $QUORUM_DATA_DIR/password.txt;
            NETWORK_ID=10
            args=\" --gcmode archive --raft  --raftport 50401 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft \";
-           /usr/local/bin/geth \
+           PRIVATE_CONFIG=ignore /usr/local/bin/geth \
            --datadir $QUORUM_DATA_DIR \
            $args \
-           --permissioned \
-           --nodiscover \
            --nat=none \
            --verbosity 9 \
            --networkid $NETWORK_ID \
@@ -146,24 +89,18 @@ spec:
           - containerPort: 8546
           - containerPort: 21000
         env:
-        - name: PRIVATE_CONFIG
-          value: /etc/quorum/qdata/tm/tm.ipc
         - name: QUORUM_DATA_DIR
           value: /etc/quorum/qdata/dd
         - name: QUORUM_HOME
           value: /etc/quorum/qdata
         - name: QHOME
           value: /etc/quorum/qdata
-        - name: TM_HOME
-          value: /etc/quorum/qdata/tm/
         volumeMounts:
         - name: genesis-config-persistent-storage
           mountPath: /etc/quorum/genesis/genesis-geth.json
           subPath: genesis-geth.json
         - name: quorum-persistent-storage
           mountPath: /etc/quorum/qdata
-        - name: tm-persistent-storage
-          mountPath: /etc/quorum/qdata/tm
         - name: quorum-key-config-persistent-storage
           mountPath: /etc/quorum/qdata/dd/keystore/key
           subPath: key
@@ -175,47 +112,13 @@ spec:
         - name: quorum-enode
           mountPath: /etc/quorum/qdata/dd/geth/enode
           subPath: enode
-        - name: quorum-permissioned-config
-          mountPath: /etc/quorum/qdata/permission-nodes
-        - name: geth-helpers
-          mountPath: /geth-helpers
-          #subPath: permissioned-nodes.json
-       # - name: quorum-permissioned-config
-       #   mountPath: /etc/quorum/qdata/dd/static-nodes.json.tmpl
-       #   subPath: permissioned-nodes.json
       volumes:
-      - name: quorum-permissioned-config
-        configMap:
-          name: {{ include "quorum.name" . }}-quorum-permissioned-config
-          items:
-          - key: permissioned-nodes.json
-            path: permissioned-nodes.json.tmpl
-          - key: permissioned-update.sh
-            path: permissioned-update.sh
       - name: genesis-config-persistent-storage
         configMap:
           name: {{ include "quorum.name" . }}-genesis-config
           items:
           - key: genesis-geth.json
             path: genesis-geth.json
-      - name: tessera-config
-        configMap:
-          name: {{ include "quorum.name" . }}-tessera-config
-          items:
-          - key: tessera-config.json.tmpl
-            path: tessera-config.json.tmpl
-          - key: tessera-config-enhanced.json.tmpl
-            path: tessera-config-enhanced.json.tmpl
-          - key: tessera-config-9.0.json.tmpl
-            path: tessera-config-9.0.json.tmpl
-      - name: keystore-tm
-        configMap:
-          name: quorum-{{ include "quorum.name" . }}-tm-key-config
-          items:
-          - key: tm.pub
-            path: tm.pub
-          - key: tm.key
-            path: tm.key
       - name: quorum-key-config-persistent-storage
         configMap:
           name: quorum-{{ include "quorum.name" . }}-account-key-config
@@ -234,33 +137,11 @@ spec:
           items:
             - key: enode
               path: enode
-      - name: geth-helpers
-        configMap:
-          name: {{ include "quorum.name" . }}-geth-helpers
-          items:
-            - key: geth-attach.sh
-              path: geth-attach.sh
-            - key: geth-exec.sh
-              path: geth-exec.sh
-          defaultMode: 0777
-      # PVC (configurable) https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-volumes
       - name: quorum-persistent-storage
         persistentVolumeClaim:
           claimName:  quorum-{{ include "quorum.name" . }}-pvc
-      - name: tm-persistent-storage
-        persistentVolumeClaim:
-          claimName: quorum-{{ include "quorum.name" . }}-tm-pvc
       - name: quorum-logs-persistent-storage
         persistentVolumeClaim:
           claimName: quorum-{{ include "quorum.name" . }}-log-pvc
-      - name: sh-files
-        configMap:
-          name: {{ include "quorum.name" . }}-sh-files
-          items:
-            - key: tessera.sh
-              path: tessera.sh
-          defaultMode: 0777
----
-#0ba6b9f606a43a95edc6247cdb1c1e105145817be7bcafd6b2c0ba15d58145f0dc1a194f70ba73cd6f4cdd6864edc7687f311254c7555cc32e4d45aeb1b80416
 
 
