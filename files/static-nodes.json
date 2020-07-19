@@ -1,0 +1,3 @@
+[
+  "enode://{{ .Values.enodeOverride }}@%QUORUM-NODE1_SERVICE_HOST%:21000?discport=0&raftport=50401",
+]
