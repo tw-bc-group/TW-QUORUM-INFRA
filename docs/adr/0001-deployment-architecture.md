@@ -8,7 +8,15 @@ Date: 2020-07-14
 
 ## Context
 
-Deploy quorum with terraform and k8s
+
+### 当下问题
+
+使用docker-compose在一台ec2上部署了7个节点，并且磁盘使用的和业务服务是一样的，会遇到以下问题：
+   1. 磁盘不够用，因为和业务服务在一起，没法换成便宜的磁盘，会影响业务服务功能
+   2. 单点故障，ec2重启所有节点都重启
+   3. 重启一个节点不方便
+   4. 加入一个节点不方便
+   5. 修改配置麻烦
 
 ### 业务需求
 1. 自动化启动最小的quorum网络
@@ -35,25 +43,11 @@ Deploy quorum with terraform and k8s
 4. tessera 有高可用方案
 5. quorum 有高可用方案
 
-### Quorum Node Configuration Requirements
-
-1. Two or more Quorum Nodes serve as one client node.
-2. The inbound RPC requests from clients will be load balanced to one of these Quorum nodes.
-3. These nodes will need to share same key for transaction signing and should have shared access to key store directory or key vaults.
-4. These nodes need to share the same private state. They could either connect to local Tessera node or in ‘full’ HA setup using proxy running on each Quorum node listening on local ipc file and directing request to Tessera Q2T http but in both cases the Tessera node(s) share the same database.
-
-### Tessera Node Configuration Requirements
-1. Separate Proxy server to redirect/mirror requests to two or more Tessera nodes
-Two or more Tessera Nodes serve as Privacy manager for Client Quorum node.
-2. These nodes share same public/private key pair (stored in password protected files or external vaults) and share same database.
-3. In the server config, the bindingAddress should be the local addresses (their real addresses), but ‘advertisedAddress’ (serverAddress) needs to be configured to be the proxy
-4. Add DB replication or mirroring for Tessera private data store and the JDBC connection string to include both Primary DB and DR DB connections to facilitate auto switchover on failure.
-
 ### 里程碑
 
-#### M1. 主要目标：quorum高可用
+#### M1. 主要目标：内网quorum高可用
 
-使用 k8s，quorum 节点在不同的 pod 上，挂载各自的磁盘，可以使用多台机器
+使用 k8s，部署quorum 节点在不同的 pod 上，挂载各自的磁盘，可以使用多台机器
 
 |checklist|作用|是否完成|
 |--- | --- | --- |
@@ -78,16 +72,21 @@ Two or more Tessera Nodes serve as Privacy manager for Client Quorum node.
 | 启动 quorum + tessera 加入网络 | 可以发起私有交易 | 否，有手动方法 |
 | 不启动 tessera 组件7nodes | 简化网络 | 否 |
 
-#### M3. 主要目标：tessera 高可用
+#### M3. 主要目标：内网 tessera 高可用
 
 |checklist|作用|是否完成|
 |--- | --- | --- |
 | tessera 多服务 | tessera 是java+数据库服务，可以部署多个，用 lb 负载 | 否 |
 | tessera 和 quorum 部署在不同 container | tessera 和 quorum 互不影响 |否 |
-| 联盟中的各个节点在不同可以用区 | 保证可用区容灾 | 否 |
-| 在不同 PVC | 异构网络组网 | 否 |
 | tessera 数据库 HA | 数据库高可用， tessera使用同一个数据库| 否 |
 | LB HA | LB 高可用 | 否，内网可以依赖 k8s 的 service |
+
+#### M4. 异构网络组网
+
+| 联盟中的各个节点在不同可以用区 | 保证可用区容灾 | 否 |
+| 在不同 PVC | 异构网络组网 | 否 |
+| tessera数据库如何处理 | 异构网络组网 | 否 |
+
 
 ### M1+M2 部署图
 
@@ -96,6 +95,7 @@ Two or more Tessera Nodes serve as Privacy manager for Client Quorum node.
 1. 上图 VM 可以看成 K8s Pod 中的 container.
 2. 图片上部分是 M1 目标
 2. 图片下部分是 M1 目标
+3. M1,M2 不包含 P2P LB（需要调研，不太明确其作用）
 
 ### M3 部署图1
 
