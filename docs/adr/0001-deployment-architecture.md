@@ -122,6 +122,12 @@ Tessera 在自己的 container 中
 
 云环境一般都提供了 VPC，VPC下有可用区，可用区隔离了电力，机房等硬件环境，我们为了提高可用性，可以把quorum最小网络部署在不同的VPC和可用区。
 
+### 流程
+
+![](../images/blockchain-automation-framework-quorum.png)
+
+1. 上图的 ansible 还未使用
+
 ## Decision
 
 按照里程碑分布开发，首先完成M1
@@ -136,4 +142,4 @@ Consequences here...
 1. [How-To-Guides/HA_Setup](http://docs.goquorum.com/en/latest/How-To-Guides/HA_Setup/)
 2. [7nodes Example](https://github.com/jpmorganchase/qubernetes/tree/master/7nodes)
 3. [Data recovery](https://docs.goquorum.com/en/latest/Privacy/Tessera/Tessera%20Services/Transaction%20Manager/)
-4. [https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3](https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3)
+4. [Running Tessera with Postgres](https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3)
