@@ -80,6 +80,7 @@ Date: 2020-07-14
 | tessera 和 quorum 部署在不同 container | tessera 和 quorum 互不影响 |否 |
 | tessera 数据库 HA | 数据库高可用， tessera使用同一个数据库| 否 |
 | LB HA | LB 高可用 | 否，内网可以依赖 k8s 的 service |
+| tessera 切换数据库 | 当前数据库是 H2 | 否 | 
 
 #### M4. 异构网络组网
 
@@ -134,3 +135,5 @@ Consequences here...
 
 1. [How-To-Guides/HA_Setup](http://docs.goquorum.com/en/latest/How-To-Guides/HA_Setup/)
 2. [7nodes Example](https://github.com/jpmorganchase/qubernetes/tree/master/7nodes)
+3. [Data recovery](https://docs.goquorum.com/en/latest/Privacy/Tessera/Tessera%20Services/Transaction%20Manager/)
+4. [https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3](https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3)
