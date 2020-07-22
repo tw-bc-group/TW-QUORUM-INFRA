@@ -143,3 +143,5 @@ Consequences here...
 2. [7nodes Example](https://github.com/jpmorganchase/qubernetes/tree/master/7nodes)
 3. [Data recovery](https://docs.goquorum.com/en/latest/Privacy/Tessera/Tessera%20Services/Transaction%20Manager/)
 4. [Running Tessera with Postgres](https://medium.com/@arun.s/running-tessera-with-postgres-ea182d6aefb3)
+5. [Creating a network from scratch](http://docs.goquorum.com/en/latest/Getting%20Started/Creating-A-Network-From-Scratch/)
+6. [DNS for Quorum](http://docs.goquorum.com/en/latest/Quorum%20Features/dns/#static-nodes)
