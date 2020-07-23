@@ -122,6 +122,8 @@ Tessera 在自己的 container 中
 
 云环境一般都提供了 VPC，VPC下有可用区，可用区隔离了电力，机房等硬件环境，我们为了提高可用性，可以把quorum最小网络部署在不同的VPC和可用区。
 
+> quorum network 指的是集群，各个 quorum network 共同组件了一个网络
+
 ### 流程
 
 ![](../images/blockchain-automation-framework-quorum.png)
