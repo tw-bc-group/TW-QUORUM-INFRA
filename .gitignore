@@ -29,7 +29,6 @@ override.tf.json
 # example: *tfplan*
 
 /.idea/
-
-
 # logs
 *.log
+*.out
