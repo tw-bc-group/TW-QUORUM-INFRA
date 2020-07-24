@@ -1,9 +1,11 @@
-NS 		:= quorum-namespace
-NAME  := quorum 
+NS 		?= quorum-namespace
+NAME  ?= quorum 
+HELM	?= helm
+KUBE	?= kuberctl 
+
 CHART := ./
-HELM	:= helm
-H     ?= $(HELM) -n $(NS)
-K     := kuberctl -n $(NS)
+H     := $(HELM) -n $(NS)
+K     := $(KUBE) -n $(NS)
 
 install:
 	$(H) install $(NAME) $(CHART)
@@ -15,4 +17,4 @@ status:
 	watch $(K) get all
 
 deploy:
-	$(H) --install $(NAME) $(CHART)
+	$(H) upgrade --install $(NAME) $(CHART)
