@@ -171,6 +171,7 @@ spec:
            --rpc \
            --rpcaddr 0.0.0.0 \
            --rpcport 8546 \
+           --rpcvhosts=* \
            --port 21000 \
             \
            --password $QUORUM_DATA_DIR/password.txt 2>&1 | tee -a /etc/quorum/qdata/logs/quorum.log;"
