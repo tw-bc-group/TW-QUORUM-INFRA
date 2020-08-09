@@ -2,318 +2,129 @@
 
 ---
 
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: quorum-efs-sc
+provisioner: efs.csi.aws.com
+
+
+---
+{{- $efs  := .Values.efs -}}
+
+{{ range tuple 1 2 3 4 5 6 7 }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: quorum-efs-pv{{.}}
+  labels:
+    pv: quorum-efs-pv{{.}}
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: quorum-efs-sc
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ $efs }}:/quorum-dir{{.}}                     
+
     
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: quorum-node1-quorum
-  
+  name: quorum-node{{.}}-quorum
   annotations:
 spec:
-  
+  selector:
+    matchLabels:
+      pv: quorum-efs-pv{{.}}
   accessModes:
-    - ReadWriteOnce
+      - ReadWriteMany
+  storageClassName: quorum-efs-sc
+  resources:
+    requests:
+      storage: 200Mi
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: quorum-efs-pv{{.}}-tm
+  labels:
+    pv: quorum-efs-pv{{.}}-tm
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: quorum-efs-sc
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ $efs }}:/quorum-tm-dir{{.}}  
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: quorum-node{{.}}-tm-pvc
+  annotations:
+spec:
+  selector:
+    matchLabels:
+      pv: quorum-efs-pv{{.}}-tm
+  accessModes:
+      - ReadWriteMany
+  storageClassName: quorum-efs-sc
   resources:
     requests:
       storage: 200Mi
 
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: quorum-node1-tm-pvc
-  
-  annotations:
+  name: quorum-efs-pv{{.}}-log
+  labels:
+    pv: quorum-efs-pv{{.}}-log
 spec:
-  
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: quorum-efs-sc
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ $efs }}:/quorum-log{{.}}  
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: quorum-node1-log-pvc
-  
+  name: quorum-node{{.}}-log-pvc
   annotations:
 spec:
-  
+  selector:
+    matchLabels:
+      pv: quorum-efs-pv{{.}}-log
   accessModes:
-    - ReadWriteOnce
+      - ReadWriteMany
+  storageClassName: quorum-efs-sc
   resources:
     requests:
       storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node2-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node2-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node2-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node3-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node3-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node3-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node4-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node4-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node4-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node5-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node5-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node5-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node6-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node6-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node6-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node7-quorum
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node7-tm-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: quorum-node7-log-pvc
-  
-  annotations:
-spec:
-  
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 200Mi
+{{ end }}

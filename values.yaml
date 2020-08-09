@@ -2,6 +2,7 @@
 nameOverride: ""
 fullnameOverride: ""
 storageOverride: 200Mi
+efs: fs-f633fa13
 
 serviceAccount:
   # Specifies whether a service account should be created

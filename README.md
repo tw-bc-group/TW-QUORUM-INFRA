@@ -37,7 +37,13 @@ kubectl logs <podname> --previous
 
 # 命名空间使用`kubectl apply -f`后被污染，删除objects
 kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=default 
-kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=quorum-namespace  
+
+kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=quorum-namespace 
+
+kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=yin 
+
+kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=yin
+
 
 ```
 
@@ -51,7 +57,7 @@ nohup kubectl port-forward deployment/quorum-node1-deployment 8546:8546 &
 
 # 查询eth
 npm install tw-eth-cli -g
-echo "module.exports = { url: 'http://127.0.0.1:8546/'}" > ~/tw-eth-cli-config1.js 
+echo "module.exports = { url: 'http://127.0.0.1:8546/'}" > ~/tw-eth-cli-config1.js
 tw-eth-cli balanceOf 0xed9d02e382b34818e88b88a309c7fe71e65f419d
 ```
 
