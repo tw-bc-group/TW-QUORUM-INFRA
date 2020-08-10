@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1
+spec:
+  containers:
+  - name: app1
+    image: busybox
+    command: ["/bin/sh"]
+    args:
+    - "-cx"
+    - "
+      for k in $(seq 1 7);
+      do
+          mkdir -p quorum/quorum-dir${k};
+          mkdir -p quorum/quorum-tm-dir${k};
+          mkdir -p quorum/quorum-log${k};
+      done;
+      ls -al ./quorum/;
+      while true; do echo $(date -u) >> /quorum/date.txt; sleep 5; done"
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: /quorum
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: efs-claim

@@ -37,14 +37,6 @@ kubectl logs <podname> --previous
 
 # 命名空间使用`kubectl apply -f`后被污染，删除objects
 kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=default 
-
-kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=quorum-namespace 
-
-kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=yin 
-
-kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=yin
-
-
 ```
 
 ### 访问节点
@@ -61,8 +53,22 @@ echo "module.exports = { url: 'http://127.0.0.1:8546/'}" > ~/tw-eth-cli-config1.
 tw-eth-cli balanceOf 0xed9d02e382b34818e88b88a309c7fe71e65f419d
 ```
 
+### 查看节点目录
+
+```sh
+kubectl -n test-namespace -c quorum exec -ti quorum-node1-deployment-598bfc9999-dmcb6 -- ls -al /etc/quorum/qdata
+
+total 20
+drwxr-xr-x    7 root     root          6144 Aug 10 14:08 .
+drwxr-xr-x    4 root     root            34 Aug 10 13:57 ..
+drwxr-xr-x    4 root     root          6144 Aug 10 13:57 contracts
+drwx------    7 root     root          6144 Aug 10 14:08 dd
+drwxr-xr-x    2 root     root          6144 Aug 10 14:08 logs
+drwxrwxrwx    3 root     root           125 Aug 10 13:56 permission-nodes
+drwxr-xr-x    2 root     root          6144 Aug 10 13:58 tm
+```
+
 ## 配置文件解释
 
 | 文件 | 作用 | 如何生成 | 
 | --- | --- | --- |
-|

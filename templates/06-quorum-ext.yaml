@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
 spec:
   rules:
-  - host: node{{.}}.quorum.cn.blockchain.thoughtworks.cn
+  - host: efs.node{{.}}.quorum.cn.blockchain.thoughtworks.cn
     http:
       paths:
       - path: /

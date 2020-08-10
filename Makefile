@@ -1,4 +1,4 @@
-NS 		?= quorum-efs-namespace
+NS 		?= test-namespace
 NAME  ?= quorum-efs 
 HELM	?= helm
 KUBE	?= kubectl
