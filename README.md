@@ -37,6 +37,9 @@ kubectl logs <podname> --previous
 
 # 命名空间使用`kubectl apply -f`后被污染，删除objects
 kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=default 
+
+
+kubectl delete --all deployments,configmaps,pods,pvc,service --namespace=test-namespace
 ```
 
 ### 访问节点
@@ -56,7 +59,7 @@ tw-eth-cli balanceOf 0xed9d02e382b34818e88b88a309c7fe71e65f419d
 ### 查看节点目录
 
 ```sh
-kubectl -n test-namespace -c quorum exec -ti quorum-node1-deployment-598bfc9999-dmcb6 -- ls -al /etc/quorum/qdata
+kubectl -n test-namespace -c quorum exec -ti quorum-node1-deployment-79b5956fd6-wlntg -- ls -al /etc/quorum/qdata
 
 total 20
 drwxr-xr-x    7 root     root          6144 Aug 10 14:08 .
@@ -66,6 +69,12 @@ drwx------    7 root     root          6144 Aug 10 14:08 dd
 drwxr-xr-x    2 root     root          6144 Aug 10 14:08 logs
 drwxrwxrwx    3 root     root           125 Aug 10 13:56 permission-nodes
 drwxr-xr-x    2 root     root          6144 Aug 10 13:58 tm
+```
+
+### 节点之间连接问题
+
+```sh
+kubectl -n test-namespace -c quorum exec -ti quorum-node1-deployment-79b5956fd6-wlntg -- netstat -a | grep 50401 | grep LISTEN
 ```
 
 ## 配置文件解释

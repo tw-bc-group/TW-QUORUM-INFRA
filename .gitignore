@@ -32,5 +32,6 @@ override.tf.json
 # logs
 *.log
 *.out
+*.txt
 
 .DS_Store

@@ -71,7 +71,8 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernete
 
 ## Decision
 
-Decision here...
+1. 目前认为 EFS 更加便宜，好运维，不需要关注磁盘大小。
+2. 但是EFS延迟比EBS大，需要进一步测试
 
 ## Consequences
 
