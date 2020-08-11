@@ -26,9 +26,6 @@ Also you can verify that data is written onto EFS filesystem:
 kubectl exec -ti app1 -- ls -al
 kubectl exec -ti app1 -- ls -al quorum
 
-kubectl -n test-namespace exec -ti quorum-node1-deployment-598bfc9999-dmcb6  -- ls -al $QHOME
-
-
 -rw-r--r--    1 root     root           464 Aug 10 13:38 date.txt
 drwxr-xr-x    2 root     root          6144 Aug 10 13:38 quorum-dir1
 drwxr-xr-x    2 root     root          6144 Aug 10 13:38 quorum-dir2

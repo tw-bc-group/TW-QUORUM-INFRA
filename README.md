@@ -69,6 +69,10 @@ drwx------    7 root     root          6144 Aug 10 14:08 dd
 drwxr-xr-x    2 root     root          6144 Aug 10 14:08 logs
 drwxrwxrwx    3 root     root           125 Aug 10 13:56 permission-nodes
 drwxr-xr-x    2 root     root          6144 Aug 10 13:58 tm
+
+与ebs的比较
+
+kubectl -n quorum-namespace -c quorum exec -ti quorum-node1-deployment-598bfc9999-jx929 -- ls -al /etc/quorum/qdata
 ```
 
 ### 节点之间连接问题
