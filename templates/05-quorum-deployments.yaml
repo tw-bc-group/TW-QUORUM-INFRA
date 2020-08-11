@@ -654,7 +654,7 @@ spec:
           readOnly: false
       containers:
       - name: tessera
-        image: quorumengineering/tessera:0.11
+        image: benhaben/tessera:0.11
         command: ["sh"]
         args:
         - "-cx"
@@ -1545,7 +1545,7 @@ spec:
           readOnly: false
       containers:
       - name: tessera
-        image: quorumengineering/tessera:0.11
+        image: benhaben/tessera:0.11
         command: ["sh"]
         args:
         - "-cx"
@@ -1842,7 +1842,7 @@ spec:
           readOnly: false
       containers:
       - name: tessera
-        image: quorumengineering/tessera:0.11
+        image: benhaben/tessera:0.11
         command: ["sh"]
         args:
         - "-cx"
