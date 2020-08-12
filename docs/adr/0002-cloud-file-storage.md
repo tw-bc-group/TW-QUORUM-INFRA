@@ -73,6 +73,7 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernete
 
 1. 目前认为 EFS 更加便宜，好运维，不需要关注磁盘大小。
 2. 但是EFS延迟比EBS大，需要进一步测试
+3. EFS 在环境重启后，节点缓存的文件仍然存在，可能会导致下次启动用老的文件
 
 ## Consequences
 
