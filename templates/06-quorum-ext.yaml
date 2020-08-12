@@ -3,12 +3,12 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: quorum-node{{.}}-ingress
+  name: efs.quorum-node{{.}}-ingress
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
 spec:
   rules:
-  - host: node{{.}}.quorum.cn.blockchain.thoughtworks.cn
+  - host: efs.node{{.}}.quorum.cn.blockchain.thoughtworks.cn
     http:
       paths:
       - path: /
