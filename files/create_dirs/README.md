@@ -49,3 +49,10 @@ drwxr-xr-x    2 root     root          6144 Aug 10 13:38 quorum-tm-dir5
 drwxr-xr-x    2 root     root          6144 Aug 10 13:38 quorum-tm-dir6
 drwxr-xr-x    2 root     root          6144 Aug 10 13:38 quorum-tm-dir7
 ```
+
+### 切换默认namespace
+
+```sh
+kubectl config set-context --current --namespace=quorum-namespace 
+kubectl config view | grep namespace:                            
+```

@@ -1,0 +1,36 @@
+
+{{- $efs  := .Values.efs -}}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-delete-logs
+  labels:
+    pv: efs-pv-delete-logs
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc-delete-logs
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ $efs }}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-claim-delete-logs
+spec:
+  selector:
+    matchLabels:
+      pv: efs-pv-delete-logs
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc-delete-logs
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: efs-delete-logs-job
+spec:
+  schedule: "0 17 * * 6"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: efs-delete-logs
+              image: busybox
+              command: ["/bin/sh"]
+              args:
+                - "-cx"
+                - "
+              for k in $(seq 1 7);
+               do
+                   rm -fr quorum/quorum-log${k}/*.log;
+               done;"
+              volumeMounts:
+                - name: persistent-storage
+                  mountPath: /quorum
+          volumes:
+            - name: persistent-storage
+              persistentVolumeClaim:
+                claimName: efs-claim-delete-logs
