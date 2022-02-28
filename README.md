@@ -1,3 +1,5 @@
+[![Quorum CI](https://github.com/tw-bc-group/tw-quorum-helm/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/tw-bc-group/tw-quorum-helm/actions/workflows/main.yml)
+<br />
 # TW-QUORUM-INFRA
 helm, k8s, quorum 
 
